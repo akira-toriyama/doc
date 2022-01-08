@@ -42,7 +42,7 @@ type Props =
 type APIRes = null | { error: boolean; data: Array<string> };
 type Fn = (res: APIRes) => Props;
 /**
- * TSの型を考慮するとUIの状態は、`boolean`より文字列が良い。 
+ * TSの型を考慮するとUIの状態は、`boolean`より文字列が良い。
  */
 export const fn: Fn = (res) => {
   if (res == null) {
