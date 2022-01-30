@@ -84,3 +84,35 @@
 // 入力値をそのまま返す
 const identify = <T>(p: T) => p;
 // ------------------------------------------------------
+
+// ------------------------------------------------------
+// 値を包むコンテナ
+// ------------------------------------------------------
+{
+  /**
+   * コンテナ
+   */
+  type Container<T> = {
+    value: T;
+  };
+
+  /**
+   * 値をコンテナに入れる
+   */
+  type Of = <T>(p: T) => Container<T>;
+  const of: Of = (value) => ({ value });
+
+  /**
+   * コンテナの値に関数を適用する
+   */
+  type Map = <T, U>(f: (p: T) => U) => (fa: Container<T>) => Container<U>;
+  const map: Map = (f) => (fa) => of(f(fa.value));
+
+  const getLen = (s: string) => s.length;
+
+  const wrappedStr = of("foo");
+  const lenGetter = map(getLen);
+
+  const len = lenGetter(wrappedStr);
+}
+// ------------------------------------------------------
