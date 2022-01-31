@@ -87,7 +87,6 @@ const identify = <T>(p: T) => p;
 
 // ------------------------------------------------------
 // 値を包むコンテナ
-// ------------------------------------------------------
 {
   /**
    * コンテナ
@@ -114,5 +113,39 @@ const identify = <T>(p: T) => p;
   const lenGetter = map(getLen);
 
   const len = lenGetter(wrappedStr);
+}
+// ------------------------------------------------------
+
+// ------------------------------------------------------
+// アプリカティブ
+{
+  // コンテナの中に入れた関数を、コンテナの中に入れた値を変換することができます。
+  type Container<T> = {
+    value: T;
+  };
+
+  type Of = <T>(value: T) => Container<T>;
+  const of: Of = (value) => ({ value });
+
+  type Map = <T, U>(f: (p: T) => U) => (fa: Container<T>) => Container<U>;
+  const map: Map =
+    (f) =>
+    ({ value }) =>
+      of(f(value));
+
+  type Applicative = <T, U>(
+    f: Container<(p: T) => U>
+  ) => (fa: Container<T>) => Container<U>;
+
+  const applicative: Applicative =
+    ({ value: f }) =>
+    ({ value }) =>
+      of(f(value));
+
+  const inc = (x: number) => x + 1;
+
+  const wf = of(inc);
+  const wv = of(3);
+  const c = applicative(wf)(wv);
 }
 // ------------------------------------------------------
